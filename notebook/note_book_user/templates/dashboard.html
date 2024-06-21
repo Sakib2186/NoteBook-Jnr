@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    
+    <style>
+        .logout-button {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+        }
+    </style>
+
+</head>
+<body>
+    <h2>Notebook Dashboard</h2>
+    <p>Messages Will be shown here</p>
+    <form id="noteForm">
+        <label for="noteTitle">Note Title:</label><br>
+        <input type="text" id="noteTitle" name="noteTitle" required><br><br>
+        <label for="noteContent">Note Content:</label><br>
+        <textarea id="noteContent" name="noteContent" rows="4" cols="50" required></textarea><br><br>
+        <label for="noteImage">Image (if any):</label><br>
+        <input type="file" id="noteTitle" name=""><br><br>
+        <input type="submit" value="Add Note">
+        
+    </form>
+    <h3>Notes</h3>
+    <form>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th style="width: 400px;">Description</th>
+                <th style="width: 200px">Image</th>
+                <th>Date</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody id="notesTable">
+            <td>
+                My Day
+            </td>
+            <td>
+                Today I had Cake, while listening to Ariana Grande
+            </td>
+            <td>
+                <img src="https://th.bing.com/th/id/OIP.1t84p0Vg1_UY8uu1IetjPgHaHa?rs=1&pid=ImgDetMain" alt="My notebook Image" width="200px" height="auto";>
+            </td>
+            <td>
+                06/02/2024
+            </td>
+            <td>
+                <input type="submit" value="Delete" name = "delete_note">
+            </td>
+        </tbody>
+    </table>
+    <input type="submit" class="logout-button" value="Logout">
+    </form>
+</body>
+</html>
