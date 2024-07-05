@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
+    <title>{{title}}</title>
     
     <style>
         .logout-button {
@@ -16,19 +16,20 @@
 </head>
 <body>
     <h2>Notebook Dashboard</h2>
-    <p>Messages Will be shown here</p>
-    <form id="noteForm">
+    {% for i in messages %}
+    <p>{{i}}</p>
+    {% endfor %}
+    <form method ="POST" id="noteForm" enctype="multipart/form-data">
+        {% csrf_token %}
         <label for="noteTitle">Note Title:</label><br>
-        <input type="text" id="noteTitle" name="noteTitle" required><br><br>
+        <input type="text" id="noteTitle" name="noteTitle"><br><br>
         <label for="noteContent">Note Content:</label><br>
-        <textarea id="noteContent" name="noteContent" rows="4" cols="50" required></textarea><br><br>
+        <textarea id="noteContent" name="noteContent" rows="4" cols="50" ></textarea><br><br>
         <label for="noteImage">Image (if any):</label><br>
-        <input type="file" id="noteTitle" name=""><br><br>
-        <input type="submit" value="Add Note">
+        <input type="file" id="noteTitle" name="image"><br><br>
+        <input type="submit" value="Add Note" name="submit_note">
         
-    </form>
     <h3>Notes</h3>
-    <form>
     <table border="1">
         <thead>
             <tr>
@@ -40,24 +41,32 @@
             </tr>
         </thead>
         <tbody id="notesTable">
+            {% for notes in all_notes %}
+            <tr>
             <td>
-                My Day
+                {{notes.title}}
             </td>
             <td>
-                Today I had Cake, while listening to Ariana Grande
+                {{notes.description}}
             </td>
             <td>
-                <img src="https://th.bing.com/th/id/OIP.1t84p0Vg1_UY8uu1IetjPgHaHa?rs=1&pid=ImgDetMain" alt="My notebook Image" width="200px" height="auto";>
+                <img src="{{media_url}}{{notes.image}}" alt="My notebook Image" width="300px" height="auto";>
             </td>
             <td>
-                06/02/2024
+               {{notes.date}}
             </td>
             <td>
                 <input type="submit" value="Delete" name = "delete_note">
+                <input type="hidden" value= "{{notes.pk}}" name="note_id">
             </td>
+            </tr>
+            {% endfor %}
         </tbody>
     </table>
-    <input type="submit" class="logout-button" value="Logout">
+    </form>
+    <form method = "post">
+    {% csrf_token %}
+    <input type="submit" class="logout-button" value="Logout" name = "logout_btn">
     </form>
 </body>
 </html>

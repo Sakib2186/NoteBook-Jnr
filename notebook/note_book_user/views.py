@@ -1,6 +1,11 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth.models import auth,User
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from .renderData import Data_Manpulation
+from .models import NoteBooks
+from notebook import settings
+
 
 # Create your views here.
 def login_page(request):
@@ -23,8 +28,54 @@ def login_page(request):
 
     return render(request,"login.html")
 
+@login_required #function decorator
 def dashboard(request):
-    return render(request, "dashboard.html")
+
+    
+    all_notes = NoteBooks.objects.filter(user = User.objects.get(username = request.user.username)).order_by('-date')
+    title = "Dashboard"
+    print(all_notes)
+    
+    #forming request
+    if request.method == "POST":
+
+        if request.POST.get('logout_btn'):
+           
+            auth.logout(request)
+            return redirect('note_book_user:login_page')
+        
+        if request.POST.get('submit_note'):
+
+            noteTitle = request.POST.get('noteTitle')
+            noteContent = request.POST.get('noteContent')
+            image = request.FILES.get('image')
+
+
+            if Data_Manpulation.save_notebook_data(request,noteTitle,noteContent,image):
+                messages.success(request,"Notes added")     
+            else:
+                messages.error(request,"Failed")
+            return redirect('note_book_user:dashboard')
+        
+        if request.POST.get('delete_note'):
+
+            note_id = int(request.POST.get('note_id'))
+            
+            if Data_Manpulation.delete_note(note_id):
+                messages.success(request,"Note Deleted")     
+            else:
+                messages.error(request,"Failed")
+            return redirect('note_book_user:dashboard')
+
+    print(settings.MEDIA_URL)
+    context = {
+        'all_notes':all_notes,
+        'title':title,
+        'media_url':settings.MEDIA_URL,
+    }            
+
+
+    return render(request, "dashboard.html",context)
 def signup(request):
 
     if request.method == "POST":
@@ -54,3 +105,4 @@ def signup(request):
 
 
     return render(request,"signup.html")
+
